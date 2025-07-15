@@ -25,3 +25,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Auth routes
 Route::get('register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [App\Http\Controllers\Auth\RegisterController::class, 'register']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
