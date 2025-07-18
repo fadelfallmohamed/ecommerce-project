@@ -20,16 +20,19 @@ class RegisterController extends Controller
         $validated = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create([
             'nom' => $validated['nom'],
             'prenom' => $validated['prenom'],
+            'name' => $validated['nom'] . ' ' . $validated['prenom'],
+            'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
 
         Auth::login($user);
-        return redirect('/');
+        return redirect()->route('catalogue.index');
     }
 } 

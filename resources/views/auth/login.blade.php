@@ -24,6 +24,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-height: none;
+            min-height: 600px;
+            overflow-y: visible;
         }
         .tab-switcher {
             display: flex;
@@ -48,9 +51,9 @@
         }
         .form-slider {
             width: 100%;
-            overflow: hidden;
+            overflow-y: auto;
             position: relative;
-            height: 340px;
+            height: 480px;
         }
         .forms-wrapper {
             display: flex;
@@ -119,7 +122,7 @@
                 max-width: 98vw;
             }
             .form-slider {
-                height: 420px;
+                height: 600px;
             }
         }
     </style>
@@ -138,14 +141,9 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="form-group">
-                            <label for="nom">Nom :</label>
-                            <input type="text" name="nom" id="nom" value="{{ old('nom') }}" required autofocus>
-                            @error('nom')<div class="error">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="prenom">Prénom :</label>
-                            <input type="text" name="prenom" id="prenom" value="{{ old('prenom') }}" required>
-                            @error('prenom')<div class="error">{{ $message }}</div>@enderror
+                            <label for="email">Email :</label>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" required autofocus>
+                            @error('email')<div class="error">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-group">
                             <label for="password">Mot de passe :</label>
@@ -158,6 +156,15 @@
                 <!-- Inscription -->
                 <div class="form-section">
                     <h1 style="text-align:center; margin-bottom:1.2rem;">Créer un compte</h1>
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="form-group">
@@ -174,6 +181,11 @@
                             <label for="register_password">Mot de passe :</label>
                             <input type="password" name="password" id="register_password" required>
                             @error('password')<div class="error">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="register_email">Email :</label>
+                            <input type="email" name="email" id="register_email" value="{{ old('email') }}" required>
+                            @error('email')<div class="error">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-group">
                             <label for="register_password_confirmation">Confirmer le mot de passe :</label>

@@ -16,23 +16,21 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'nom' => ['required', 'string'],
-            'prenom' => ['required', 'string'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
         if (Auth::attempt([
-            'nom' => $credentials['nom'],
-            'prenom' => $credentials['prenom'],
+            'email' => $credentials['email'],
             'password' => $credentials['password'],
         ])) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->route('catalogue.index');
         }
 
         return back()->withErrors([
-            'nom' => 'Les informations de connexion sont incorrectes.',
-        ])->onlyInput('nom', 'prenom');
+            'email' => 'Les informations de connexion sont incorrectes.',
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)
