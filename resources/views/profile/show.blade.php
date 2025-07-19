@@ -31,6 +31,7 @@
         <button type="submit" class="btn btn-primary">Enregistrer</button>
         <a href="{{ route('catalogue.index') }}" class="btn btn-secondary">Annuler</a>
     </form>
+    <a href="{{ route('orders.index') }}" class="btn btn-outline-primary w-100 mt-3">Voir mes commandes</a>
     <form method="POST" action="{{ route('logout') }}" class="mt-4">
         @csrf
         <button type="submit" class="btn btn-danger w-100">Se déconnecter</button>

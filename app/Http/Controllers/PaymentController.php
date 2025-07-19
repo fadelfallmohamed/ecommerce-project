@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentConfirmation;
+use App\Models\Order;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -27,7 +30,14 @@ class PaymentController extends Controller
             'status' => 'required|string',
             'transaction_id' => 'nullable|string',
         ]);
-        Payment::create($validated);
+        $payment = Payment::create($validated);
+
+        // Envoi de l'email de confirmation de paiement
+        $order = Order::with(['user'])->find($validated['order_id']);
+        if ($order) {
+            Mail::to($order->user->email)->send(new PaymentConfirmation($order));
+        }
+
         return redirect()->route('payments.index');
     }
 

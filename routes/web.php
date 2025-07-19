@@ -53,4 +53,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/produits/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
     Route::get('/infos', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::post('/infos', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/commande', [App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
+    Route::post('/commande', [App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
+    Route::get('/commandes', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/commandes/{order}', [App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
 });

@@ -86,6 +86,9 @@
         <div class="text-end cart-total mt-3">
             Total : {{ $total }} €
         </div>
+        <div class="text-end mt-4">
+            <a href="{{ route('order.create') }}" class="btn btn-primary btn-modern">Passer commande</a>
+        </div>
     @else
         <p>Votre panier est vide.</p>
     @endif
