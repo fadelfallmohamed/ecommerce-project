@@ -65,6 +65,19 @@
                         <i class="fa-solid fa-cart-shopping"></i> Panier
                     </a>
                 </li>
+                @auth
+                <li class="nav-item position-relative">
+                    <a class="nav-link {{ request()->routeIs('notifications.*') ? 'active' : '' }}" href="{{ route('notifications.index') }}">
+                        <i class="fa-solid fa-bell"></i>
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                                <span class="visually-hidden">notifications non lues</span>
+                            </span>
+                        @endif
+                    </a>
+                </li>
+                @endauth
             @auth
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('profile.show') ? 'active' : '' }}" href="{{ route('profile.show') }}">Infos</a>
@@ -72,6 +85,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/dashboard') }}">Tableau de bord</a>
                 </li>
+                @if(auth()->user()->is_admin)
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                        <i class="fas fa-shopping-cart me-1"></i> Commandes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                        <i class="fas fa-users me-1"></i> Utilisateurs
+                    </a>
+                </li>
+                @endif
             @endauth
             </ul>
         </div>

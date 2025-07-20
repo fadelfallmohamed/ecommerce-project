@@ -32,6 +32,14 @@ Route::get('/a-propos', function () {
     return view('about');
 })->name('about');
 
+// Notification routes
+Route::middleware(['auth'])->group(function () {
+    // Notifications
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+});
+
 // Protected routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', function () {
@@ -57,4 +65,30 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/commande', [App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
     Route::get('/commandes', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
     Route::get('/commandes/{order}', [App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+    
+    // Admin routes
+    Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+        // Gestion des commandes
+        Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class);
+        Route::patch('orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])
+            ->name('orders.update-status');
+        
+        // Gestion des utilisateurs
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['show']);
+        
+        // Routes supplémentaires pour les utilisateurs
+        Route::get('users/export', [\App\Http\Controllers\Admin\UserController::class, 'export'])
+            ->name('users.export');
+    });
+
+    // Routes pour les factures
+    Route::prefix('factures')->name('invoices.')->group(function () {
+        Route::get('/generer/{order}', [App\Http\Controllers\InvoiceController::class, 'generate'])->name('generate');
+        Route::get('/telecharger/{invoice}', [App\Http\Controllers\InvoiceController::class, 'download'])->name('download');
+        
+        // Routes admin uniquement
+        Route::middleware(['admin'])->group(function () {
+            Route::post('/signer/{invoice}', [App\Http\Controllers\InvoiceController::class, 'sign'])->name('sign');
+        });
+    });
 });

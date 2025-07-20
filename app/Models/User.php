@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -45,6 +46,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function orders()
     {
         return $this->hasMany(Order::class);
@@ -53,5 +59,15 @@ class User extends Authenticatable
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+    
+    /**
+     * Vérifie si l'utilisateur est un administrateur
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->is_admin === true;
     }
 }

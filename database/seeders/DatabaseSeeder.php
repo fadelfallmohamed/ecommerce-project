@@ -15,12 +15,24 @@ class DatabaseSeeder extends Seeder
         // Création de l'utilisateur admin s'il n'existe pas
         if (!\App\Models\User::where('email', 'admin@example.com')->exists()) {
             \App\Models\User::create([
-                'nom' => 'admin',
-                'prenom' => 'admin',
-                'name' => 'admin',
+                'nom' => 'Admin',
+                'prenom' => 'Système',
+                'name' => 'Admin Système',
                 'email' => 'admin@example.com',
                 'password' => bcrypt('admin123'),
+                'is_admin' => true,
             ]);
+            
+            $this->command->info('Admin user created successfully!');
+            $this->command->info('Email: admin@example.com');
+            $this->command->info('Password: admin123');
+        } else {
+            // Mettre à jour l'utilisateur admin existant pour s'assurer qu'il a les bons droits
+            $admin = \App\Models\User::where('email', 'admin@example.com')->first();
+            if ($admin) {
+                $admin->update(['is_admin' => true]);
+                $this->command->info('Existing admin user updated with admin privileges.');
+            }
         }
 
         // Ajout d'un produit exemple : Casque Bluetooth
