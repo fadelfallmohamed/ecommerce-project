@@ -86,16 +86,16 @@
                     <a class="nav-link" href="{{ url('/dashboard') }}">Tableau de bord</a>
                 </li>
                 @if(auth()->user()->is_admin)
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
                         <i class="fas fa-shopping-cart me-1"></i> Commandes
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
                         <i class="fas fa-users me-1"></i> Utilisateurs
                     </a>
-                </li>
+                </li> --}}
                 @endif
             @endauth
             </ul>

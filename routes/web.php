@@ -25,7 +25,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [App\Http\Controllers\Auth\RegisterController::class, 'register']);
 
-Route::get('/accueil', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route d'accueil principale
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Alias pour la compatibilité
+Route::get('/accueil', [App\Http\Controllers\HomeController::class, 'index'])->name('home.alt');
 
 // Public routes
 Route::get('/a-propos', function () {
@@ -42,9 +45,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Cette route est maintenant gérée par HomeController@index
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');

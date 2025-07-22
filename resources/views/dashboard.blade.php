@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    $cartCount = $cartCount ?? 0; // Définit une valeur par défaut si $cartCount n'est pas défini
+@endphp
+
 @section('content')
 <div class="container py-5">
     <!-- En-tête de bienvenue personnalisé -->
@@ -120,14 +124,11 @@
                         <a href="{{ route('catalogue.index') }}" class="btn btn-outline-primary text-start">
                             <i class="fas fa-shopping-bag me-2"></i>Voir le catalogue
                         </a>
-                        @if(Cart::count() > 0)
+                        @if($cartCount > 0)
                             <a href="{{ route('cart.index') }}" class="btn btn-outline-primary text-start">
-                                <i class="fas fa-shopping-cart me-2"></i>Voir mon panier ({{ Cart::count() }})
+                                <i class="fas fa-shopping-cart me-2"></i>Voir mon panier ({{ $cartCount }})
                             </a>
                         @endif
-                        <a href="{{ route('orders.index') }}" class="btn btn-outline-primary text-start">
-                            <i class="fas fa-history me-2"></i>Historique des commandes
-                        </a>
                         <a href="{{ route('profile.show') }}" class="btn btn-outline-primary text-start">
                             <i class="fas fa-address-card me-2"></i>Mes informations personnelles
                         </a>
