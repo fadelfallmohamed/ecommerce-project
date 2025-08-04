@@ -87,7 +87,7 @@
             Total : {{ $total }} €
         </div>
         <div class="text-end mt-4">
-            <a href="{{ route('order.create') }}" class="btn btn-primary btn-modern">Passer commande</a>
+            <a href="{{ route('orders.create') }}" class="btn btn-primary btn-modern">Passer commande</a>
         </div>
     @else
         <p>Votre panier est vide.</p>

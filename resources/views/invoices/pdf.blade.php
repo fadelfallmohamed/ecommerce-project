@@ -225,7 +225,7 @@
                                 <i class="fas fa-file-invoice me-1"></i>
                                 Montant en lettres : 
                                 <span class="fst-italic">
-                                    {{ (new NumberFormatter('fr_FR', NumberFormatter::SPELLOUT))->format($order->total * 1.2) }} euros
+                                    {{ \App\Helpers\NumberToWordsHelper::convert(round($order->total * 1.2, 2)) }} euros
                                 </span>
                             </td>
                         </tr>

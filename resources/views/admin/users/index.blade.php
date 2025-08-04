@@ -4,9 +4,14 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">Gestion des utilisateurs</h1>
-        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus-circle me-1"></i> Nouvel utilisateur
-        </a>
+        <div>
+            <a href="{{ route('admin.users.export') }}" class="btn btn-outline-success me-2">
+                <i class="fas fa-file-excel me-1"></i> Exporter en Excel
+            </a>
+            <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-1"></i> Nouvel utilisateur
+            </a>
+        </div>
     </div>
 
     @if(session('success'))

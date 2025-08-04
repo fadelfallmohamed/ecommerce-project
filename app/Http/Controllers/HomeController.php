@@ -17,43 +17,43 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Vérifier si l'utilisateur est connecté pour afficher le tableau de bord personnalisé
-        if (auth()->check()) {
-            try {
-                // Récupérer les 5 commandes les plus récentes de l'utilisateur
-                $recentOrders = Order::where('user_id', auth()->id())
-                    ->with(['items.product'])
-                    ->latest()
-                    ->take(5)
-                    ->get();
-
-                // Récupérer le panier depuis la session
-                $cart = Session::get('cart', []);
-                $cartCount = array_sum(array_column($cart, 'quantity'));
-                
-                return view('dashboard', [
-                    'recentOrders' => $recentOrders,
-                    'cartCount' => $cartCount
-                ]);
-            } catch (\Exception $e) {
-                // En cas d'erreur, logger l'erreur et retourner une vue avec un message d'erreur
-                \Log::error('Erreur dans HomeController@index: ' . $e->getMessage());
-                return view('dashboard', [
-                    'recentOrders' => collect(),
-                    'cartCount' => 0,
-                    'error' => $e->getMessage()
-                ]);
-            }
-        }
-
-        // Pour les utilisateurs non connectés, afficher la page d'accueil standard
+        // Récupérer les produits en vedette pour la page d'accueil
         $featuredProducts = Product::with('categories')
             ->latest()
             ->take(8)
             ->get();
 
+        // Si l'utilisateur est connecté, récupérer également les informations du panier
+        if (auth()->check()) {
+            try {
+                // Récupérer le panier depuis la session
+                $cart = Session::get('cart', []);
+                $cartCount = array_sum(array_column($cart, 'quantity'));
+                
+                // Récupérer les commandes récentes pour la section du tableau de bord
+                $recentOrders = Order::where('user_id', auth()->id())
+                    ->with(['items.product'])
+                    ->latest()
+                    ->take(5)
+                    ->get();
+                
+                return view('welcome', [
+                    'featured_products' => $featuredProducts,
+                    'cartCount' => $cartCount,
+                    'recentOrders' => $recentOrders
+                ]);
+                
+            } catch (\Exception $e) {
+                // En cas d'erreur, logger l'erreur mais continuer avec les produits en vedette
+                \Log::error('Erreur dans HomeController@index: ' . $e->getMessage());
+            }
+        }
+
+        // Pour les utilisateurs non connectés, afficher la page d'accueil standard
         return view('welcome', [
-            'featured_products' => $featuredProducts
+            'featured_products' => $featuredProducts,
+            'cartCount' => 0,
+            'recentOrders' => collect()
         ]);
     }
 }

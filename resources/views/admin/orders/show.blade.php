@@ -6,7 +6,11 @@
         <div>
             <h1 class="h3">Commande #{{ $order->id }}</h1>
             <p class="text-muted mb-0">
-                Passée le {{ $order->created_at->format('d/m/Y à H:i') }}
+                @if($order->created_at)
+                    Passée le {{ $order->created_at->format('d/m/Y à H:i') }}
+                @else
+                    Date de création non disponible
+                @endif
             </p>
         </div>
         <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary">
@@ -105,7 +109,7 @@
                     <h5 class="mb-0">Mettre à jour le statut</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.orders.update-status', $order) }}" method="POST">
+                    <form action="{{ url('admin/commandes/' . $order->id . '/status') }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">

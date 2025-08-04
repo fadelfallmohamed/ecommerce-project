@@ -97,13 +97,34 @@ class InvoiceController extends Controller
             
             // Générer un nom de fichier unique
             $filename = 'facture-' . $order->id . '-' . now()->format('Y-m-d') . '.pdf';
-            $path = 'invoices/' . $filename;
+            $directory = 'invoices';
+            $relativePath = $directory . '/' . $filename;
+            $storagePath = 'public/' . $relativePath;
+            $absolutePath = storage_path('app/' . $storagePath);
+            
+            // Créer le répertoire s'il n'existe pas
+            if (!file_exists(dirname($absolutePath))) {
+                mkdir(dirname($absolutePath), 0755, true);
+            }
             
             // Sauvegarder le PDF dans le stockage
-            Storage::put('public/' . $path, $pdf->output());
-
-            // Mettre à jour le chemin du PDF
-            $invoice->update(['pdf_path' => $path]);
+            file_put_contents($absolutePath, $pdf->output());
+            
+            // Vérifier que le fichier a bien été créé
+            if (!file_exists($absolutePath)) {
+                throw new \Exception('Le fichier PDF n\'a pas pu être créé à l\'emplacement : ' . $absolutePath);
+            }
+            
+            // Mettre à jour le chemin du PDF dans la base de données
+            $invoice->update(['pdf_path' => $relativePath]);
+            
+            // Journaliser la création du fichier
+            \Log::info('Fichier PDF généré avec succès', [
+                'order_id' => $order->id,
+                'invoice_id' => $invoice->id,
+                'path' => $absolutePath,
+                'size' => filesize($absolutePath) . ' bytes'
+            ]);
 
             // Rediriger avec un message de succès
             return redirect()->route('admin.orders.show', $order)
@@ -175,15 +196,22 @@ class InvoiceController extends Controller
     public function download(Invoice $invoice)
     {
         try {
+            // Journalisation pour le débogage
+            \Log::info('Tentative de téléchargement de la facture', [
+                'invoice_id' => $invoice->id,
+                'order_id' => $invoice->order_id,
+                'user_id' => auth()->id(),
+                'is_admin' => auth()->user()->is_admin,
+                'invoice_status' => $invoice->status,
+                'pdf_path' => $invoice->pdf_path
+            ]);
+
             // Vérifier que la facture est signée
             if ($invoice->status !== 'signed') {
-                // Si l'utilisateur est admin, on le redirige vers la page de la commande
                 if (auth()->user()->is_admin) {
                     return redirect()->route('admin.orders.show', $invoice->order)
                         ->with('warning', 'Cette facture n\'a pas encore été signée.');
                 }
-                
-                // Sinon, on renvoie une erreur 403
                 abort(403, 'Cette facture n\'est pas encore disponible. Elle est en attente de signature par l\'administrateur.');
             }
 
@@ -192,22 +220,54 @@ class InvoiceController extends Controller
                 abort(403, 'Accès non autorisé à cette facture.');
             }
 
-            $path = Storage::path('public/' . $invoice->pdf_path);
+            // Nettoyer le chemin du fichier
+            $pdfPath = ltrim($invoice->pdf_path, '/');
+            $storagePath = 'public/' . $pdfPath;
+            $absolutePath = storage_path('app/' . $storagePath);
             
-            if (!file_exists($path)) {
-                // Si le fichier n'existe pas, on essaie de le régénérer (admin uniquement)
-                if (auth()->user()->is_admin) {
-                    $order = $invoice->order;
-                    $pdf = PDF::loadView('invoices.pdf', compact('order'));
-                    Storage::put('public/' . $invoice->pdf_path, $pdf->output());
-                    
-                    if (!file_exists($path)) {
-                        throw new \Exception('Impossible de régénérer la facture.');
-                    }
-                } else {
-                    // Pour les utilisateurs normaux, on renvoie une erreur
-                    abort(404, 'Le fichier de facture est introuvable. Veuillez contacter le support.');
+            // Journalisation du chemin du fichier
+            \Log::info('Chemin du fichier de facture', [
+                'pdf_path' => $pdfPath,
+                'storage_path' => $storagePath,
+                'absolute_path' => $absolutePath,
+                'file_exists' => file_exists($absolutePath),
+                'is_readable' => is_readable($absolutePath)
+            ]);
+            
+            // Si le fichier n'existe pas ou n'est pas lisible, on essaie de le régénérer
+            if (!file_exists($absolutePath) || !is_readable($absolutePath)) {
+                $order = $invoice->order;
+                \Log::info('Tentative de régénération du PDF pour la commande', [
+                    'order_id' => $order->id,
+                    'invoice_id' => $invoice->id,
+                    'user_is_admin' => auth()->user()->is_admin
+                ]);
+                
+                // Créer le PDF
+                $pdf = PDF::loadView('invoices.pdf', compact('order'));
+                $pdfContent = $pdf->output();
+                
+                // Créer le répertoire s'il n'existe pas
+                $directory = dirname($absolutePath);
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0755, true);
                 }
+                
+                // Sauvegarder le fichier
+                file_put_contents($absolutePath, $pdfContent);
+                
+                // Vérifier que le fichier a bien été créé
+                if (!file_exists($absolutePath) || !is_readable($absolutePath)) {
+                    throw new \Exception('Le fichier n\'a pas pu être généré ou n\'est pas accessible.');
+                }
+                
+                // Mettre à jour le chemin dans la base de données
+                $invoice->update(['pdf_path' => $pdfPath]);
+                
+                \Log::info('PDF régénéré avec succès', [
+                    'path' => $absolutePath,
+                    'size' => filesize($absolutePath) . ' bytes'
+                ]);
             }
 
             // Marquer la notification comme lue si l'utilisateur est le propriétaire
@@ -218,12 +278,40 @@ class InvoiceController extends Controller
                     ->update(['read_at' => now()]);
             }
 
-            // Télécharger le fichier avec un nom personnalisé
+            // Nom du fichier de téléchargement
             $filename = 'facture-' . $invoice->order_id . '-' . $invoice->signed_at->format('Y-m-d') . '.pdf';
-            return response()->download($path, $filename, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+            
+            // Vérifier que le fichier existe et est lisible
+            if (!file_exists($absolutePath) || !is_readable($absolutePath)) {
+                throw new \Exception('Le fichier de facture est introuvable ou inaccessible.');
+            }
+            
+            // Vérifier la taille du fichier
+            $fileSize = filesize($absolutePath);
+            if ($fileSize === 0) {
+                throw new \Exception('Le fichier de facture est vide.');
+            }
+            
+            // Journalisation avant le téléchargement
+            \Log::info('Préparation du téléchargement', [
+                'filename' => $filename,
+                'path' => $absolutePath,
+                'size' => $fileSize . ' bytes',
+                'mime_type' => mime_content_type($absolutePath)
             ]);
+            
+            // En-têtes de réponse
+            $headers = [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Content-Length' => $fileSize,
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Pragma' => 'public',
+                'Expires' => '0'
+            ];
+            
+            // Retourner la réponse de téléchargement
+            return response()->file($absolutePath, $headers);
 
         } catch (\Exception $e) {
             // Journaliser l'erreur

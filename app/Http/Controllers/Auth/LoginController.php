@@ -25,6 +25,12 @@ class LoginController extends Controller
             'password' => $credentials['password'],
         ])) {
             $request->session()->regenerate();
+            
+            // Rediriger vers le tableau de bord admin si l'utilisateur est admin
+            if (Auth::user() && Auth::user()->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
+            
             return redirect()->route('catalogue.index');
         }
 

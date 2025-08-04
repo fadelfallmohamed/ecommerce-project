@@ -1,0 +1,336 @@
+/* --- Modern Glassmorphism & Animations for Home Page --- */
+
+body {
+    background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    color: #222;
+}
+
+.hero-slider {
+    position: relative;
+    width: 100vw;
+    min-height: 60vh;
+    margin-bottom: 3rem;
+    overflow: hidden;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+}
+
+.swiper {
+    width: 100vw;
+    min-height: 60vh;
+}
+
+.swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 60vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    transition: background 1s cubic-bezier(.77,0,.18,1);
+}
+
+.slide-content {
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    padding: 2.5rem 3rem;
+    margin: 4rem 0 4rem 4vw;
+    color: #fff;
+    max-width: 500px;
+    animation: slideInLeft 1s cubic-bezier(.77,0,.18,1);
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-60px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.swiper-pagination-bullet {
+    background: #fff !important;
+    opacity: 0.7;
+    width: 14px;
+    height: 14px;
+    margin: 0 6px !important;
+    transition: transform 0.3s;
+}
+.swiper-pagination-bullet-active {
+    background: #6366f1 !important;
+    transform: scale(1.2);
+}
+.swiper-button-next, .swiper-button-prev {
+    color: #fff;
+    filter: drop-shadow(0 2px 8px #6366f1cc);
+}
+
+/* --- Hero Content --- */
+.hero-content {
+    padding: 2.5rem 0 2.5rem 0;
+    animation: fadeInUp 1.2s cubic-bezier(.77,0,.18,1);
+}
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: #64748b;
+    margin-bottom: 2rem;
+}
+.btn-hero {
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 2rem;
+    padding: 0.75rem 2.2rem;
+    box-shadow: 0 2px 12px 0 #6366f133;
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-hero:hover {
+    background: linear-gradient(90deg, #60a5fa 0%, #6366f1 100%);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 4px 24px 0 #6366f155;
+}
+
+/* --- Features Section --- */
+.features-section {
+    padding: 4rem 0 2rem 0;
+}
+.feature-card {
+    background: rgba(255,255,255,0.7);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 24px 0 rgba(99,102,241,0.08);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 1.2s cubic-bezier(.77,0,.18,1);
+}
+.feature-card:hover {
+    transform: translateY(-8px) scale(1.04) rotate(-1deg);
+    box-shadow: 0 8px 32px 0 #6366f144;
+    background: rgba(99,102,241,0.08);
+}
+.feature-icon {
+    font-size: 2.5rem;
+    color: #6366f1;
+    margin-bottom: 1rem;
+    transition: color 0.3s;
+}
+.feature-card:hover .feature-icon {
+    color: #1e293b;
+}
+.feature-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.feature-text {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+/* --- Steps Section --- */
+.how-it-works {
+    padding: 4rem 0 2rem 0;
+}
+.step-card {
+    background: rgba(255,255,255,0.7);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 24px 0 rgba(99,102,241,0.08);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 1.2s cubic-bezier(.77,0,.18,1);
+}
+.step-card:hover {
+    transform: translateY(-8px) scale(1.04) rotate(1deg);
+    box-shadow: 0 8px 32px 0 #6366f144;
+    background: rgba(99,102,241,0.08);
+}
+.step-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #6366f1;
+    margin-bottom: 0.5rem;
+}
+.step-icon {
+    font-size: 2.2rem;
+    color: #60a5fa;
+    margin-bottom: 1rem;
+}
+.step-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.step-text {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+/* --- CTA Section --- */
+.cta-section {
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+    border-radius: 2rem;
+    padding: 3rem 0;
+    margin: 4rem 0 2rem 0;
+    text-align: center;
+    box-shadow: 0 4px 24px 0 #6366f144;
+    animation: fadeInUp 1.2s cubic-bezier(.77,0,.18,1);
+}
+.cta-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+.cta-text {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+.cta-section .btn {
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.75rem 2.5rem;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+.cta-section .btn:hover {
+    background: #fff;
+    color: #6366f1;
+    transform: scale(1.05);
+}
+
+/* --- Product Cards --- */
+.product-card {
+    background: rgba(255,255,255,0.8);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 24px 0 rgba(99,102,241,0.08);
+    padding: 1.5rem 1rem 1.2rem 1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 1.2s cubic-bezier(.77,0,.18,1);
+}
+.product-card:hover {
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 8px 32px 0 #6366f144;
+    background: rgba(99,102,241,0.08);
+}
+.product-image img, .product-img {
+    width: 100%;
+    border-radius: 1rem;
+    object-fit: cover;
+    box-shadow: 0 2px 8px 0 #6366f122;
+    margin-bottom: 0.7rem;
+    transition: transform 0.3s;
+}
+.product-card:hover .product-image img, .product-card:hover .product-img {
+    transform: scale(1.05) rotate(-2deg);
+}
+.product-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.3rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px 0 #6366f122;
+    z-index: 2;
+}
+.product-info {
+    padding: 0.5rem 0 0 0;
+}
+.product-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+.product-description {
+    color: #64748b;
+    font-size: 0.98rem;
+    margin-bottom: 0.7rem;
+}
+.product-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6366f1;
+}
+.btn-add-to-cart {
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 2px 8px 0 #6366f122;
+}
+.btn-add-to-cart:hover {
+    background: linear-gradient(90deg, #60a5fa 0%, #6366f1 100%);
+    transform: scale(1.07);
+}
+
+/* --- Section Titles --- */
+.section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeInUp 1.2s cubic-bezier(.77,0,.18,1);
+}
+.section-title h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+}
+.section-title p {
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+/* --- Animations --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 991px) {
+    .hero-slider, .swiper, .swiper-slide {
+        min-height: 40vh;
+    }
+    .slide-content {
+        margin: 2rem 0 2rem 2vw;
+        padding: 1.5rem 1.2rem;
+        max-width: 90vw;
+    }
+}
+@media (max-width: 767px) {
+    .hero-slider, .swiper, .swiper-slide {
+        min-height: 30vh;
+        border-radius: 1rem;
+    }
+    .slide-content {
+        margin: 1rem 0 1rem 1vw;
+        padding: 1rem 0.7rem;
+        max-width: 98vw;
+    }
+    .features-section, .how-it-works {
+        padding: 2rem 0 1rem 0;
+    }
+    .cta-section {
+        padding: 2rem 0;
+        border-radius: 1rem;
+    }
+}

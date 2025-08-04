@@ -428,17 +428,22 @@
                                     <tr>
                                         <td class="ps-4">
                                             <div class="d-flex align-items-center">
-                                                @if($item->product && $item->product->images->isNotEmpty())
-                                                    <div class="flex-shrink-0 me-3" style="width: 60px; height: 60px;">
-                                                        <img src="{{ asset('storage/' . $item->product->images->first()->path) }}" 
-                                                             alt="{{ $item->product->name }}"
-                                                             class="img-fluid rounded"
-                                                             style="width: 100%; height: 100%; object-fit: cover;">
-                                                    </div>
+                                                @if($item->product)
+                                                    @if($item->product->images && $item->product->images->isNotEmpty())
+                                                        <div class="flex-shrink-0 me-3" style="width: 60px; height: 60px;">
+                                                            <img src="{{ asset('storage/' . $item->product->images->first()->path) }}" 
+                                                                 alt="{{ $item->product->name }}"
+                                                                 class="img-fluid rounded"
+                                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                                        </div>
+                                                    @else
+                                                        <div class="flex-shrink-0 me-3" style="width: 60px; height: 60px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                                                            <i class="fas fa-image" style="font-size: 1.5rem; color: #6c757d;"></i>
+                                                        </div>
+                                                    @endif
                                                 @else
-                                                    <div class="flex-shrink-0 me-3 bg-light d-flex align-items-center justify-content-center" 
-                                                         style="width: 60px; height: 60px;">
-                                                        <i class="fas fa-image text-muted"></i>
+                                                    <div class="flex-shrink-0 me-3" style="width: 60px; height: 60px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                                                        <i class="fas fa-box-open" style="font-size: 1.5rem; color: #6c757d;"></i>
                                                     </div>
                                                 @endif
                                                 <div>
@@ -520,7 +525,11 @@
                                     @if($order->invoice->status === 'signed')
                                         <p class="text-muted small mb-2 mb-sm-0">
                                             <i class="fas fa-check-circle text-success me-1"></i>
-                                            Facture signée le {{ $order->invoice->signed_at->format('d/m/Y à H:i') }}
+                                            @if($order->invoice->signed_at)
+                                                Facture signée le {{ $order->invoice->signed_at->format('d/m/Y à H:i') }}
+                                            @else
+                                                Facture signée (date non disponible)
+                                            @endif
                                         </p>
                                     @elseif($order->invoice->status === 'pending')
                                         <p class="text-muted small mb-2 mb-sm-0">
@@ -544,7 +553,7 @@
                             
                             @if(auth()->user()->is_admin && $order->invoice->status === 'pending')
                                 <div class="mt-3 pt-2 border-top">
-                                    <form action="{{ route('invoices.sign', $order->invoice) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('admin.invoices.sign', $order->invoice) }}" method="POST" class="d-inline">
                                         @csrf
                                         <button type="submit" 
                                                 class="btn btn-success btn-sm"
@@ -620,7 +629,7 @@
             @endif
             
             @if(auth()->user()->is_admin && $order->invoice && $order->invoice->status === 'pending')
-                <form action="{{ route('invoices.sign', $order->invoice) }}" method="POST" class="d-inline">
+                <form action="{{ route('admin.invoices.sign', $order->invoice) }}" method="POST" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-success btn-action" 
                             onclick="return confirm('Êtes-vous sûr de vouloir signer cette facture ? Cette action est irréversible.')">

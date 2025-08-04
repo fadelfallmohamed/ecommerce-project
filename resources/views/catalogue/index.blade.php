@@ -320,35 +320,50 @@
                     <div class="product-card">
                         <div class="product-img-container">
                             <img src="{{ $product->main_image_url }}" class="product-img" alt="{{ $product->name }}">
-                            <span class="product-badge {{ $product->stock > 0 ? 'bg-success' : 'bg-danger' }}">
-                                {{ $product->stock > 0 ? 'En stock' : 'Rupture' }}
+                            @php
+                                $stockQuantity = $product->stock_quantity ?? 0;
+                                $stockStatus = $product->stock_status;
+                                
+                                if ($stockStatus === \App\Models\Stock::STATUS_OUT_OF_STOCK) {
+                                    $badgeClass = 'bg-danger';
+                                    $badgeText = 'Rupture';
+                                } elseif ($stockStatus === \App\Models\Stock::STATUS_LOW_STOCK) {
+                                    $badgeClass = 'bg-warning';
+                                    $badgeText = 'Stock faible';
+                                } else {
+                                    $badgeClass = 'bg-success';
+                                    $badgeText = 'En stock';
+                                }
+                            @endphp
+                            <span class="product-badge {{ $badgeClass }}">
+                                {{ $badgeText }} ({{ $stockQuantity }})
                             </span>
                         </div>
                         <div class="product-body">
+                            <div class="mb-2">
+                                <span class="badge bg-primary">{{ $product->category->name ?? 'Non catégorisé' }}</span>
+                            </div>
                             <h3 class="product-title">{{ $product->name }}</h3>
                             <p class="product-description">{{ Str::limit($product->description, 80) }}</p>
-                            <div class="product-price">{{ number_format($product->price, 2, ',', ' ') }} €</div>
-                            
-                            <div class="btn-group-vertical">
-                                <a href="{{ route('catalogue.fiche', $product) }}" class="btn btn-primary">
-                                    <i class="fas fa-eye me-1"></i> Voir le produit
-                                </a>
-                                
-                                @if(auth()->check() && auth()->user()->nom === 'admin')
-                                    <div class="d-flex gap-2 mt-2">
-                                        <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary flex-grow-1">
-                                            <i class="fas fa-edit me-1"></i> Modifier
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <span class="product-price">{{ format_price(convert_euro_to_fcfa($product->price)) }}</span>
+                                <div class="btn-group">
+                                    <a href="{{ route('catalogue.fiche', $product) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye me-1"></i> Voir
+                                    </a>
+                                    @if(auth()->check() && auth()->user()->nom === 'admin')
+                                        <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger" 
-                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
-                                    </div>
-                                @endif
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

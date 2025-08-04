@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
 
 class UserController extends Controller
 {
@@ -125,5 +127,13 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Utilisateur supprimé avec succès.');
+    }
+
+    /**
+     * Exporte la liste des utilisateurs au format Excel
+     */
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'utilisateurs-' . now()->format('Y-m-d') . '.xlsx');
     }
 }
