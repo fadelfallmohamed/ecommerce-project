@@ -12,7 +12,8 @@ class NotificationController extends Controller
     public function index()
     {
         $notifications = Auth::user()->notifications()->latest()->paginate(10);
-        return view('notifications.index', compact('notifications'));
+        $unreadCount = Auth::user()->notifications()->whereNull('read_at')->count();
+        return view('notifications.index', compact('notifications', 'unreadCount'));
     }
 
     public function markAsRead(Request $request, $id)
@@ -25,7 +26,7 @@ class NotificationController extends Controller
             ]);
             
             $notification = Auth::user()->notifications()->findOrFail($id);
-            $notification->update(['is_read' => true]);
+            $notification->markAsRead();
             
             Log::info('Notification marquée comme lue avec succès', [
                 'notification_id' => $id,

@@ -199,7 +199,7 @@
                 </div>
                 <div class="team-info">
                     <span class="team-role">Designer UX/UI Créatif</span>
-                    <h3 class="team-name">Fofana Diallo</h3>
+                    <h3 class="team-name">Ibrahima Fofana</h3>
                     <p class="team-desc">
                         Designer talentueux avec un œil pour le détail, Fofana crée des expériences utilisateur exceptionnelles. Son approche centrée sur l'utilisateur et son sens aigu de l'esthétique permettent de concevoir des interfaces à la fois belles et intuitives.
                     </p>
@@ -222,7 +222,7 @@
         </div>
     </div>
 
-    <!-- Notre Histoire -->
+
     <div class="row justify-content-center mt-5 pt-5">
         <div class="col-lg-10 text-center">
             <h2 class="section-title">Notre Histoire</h2>

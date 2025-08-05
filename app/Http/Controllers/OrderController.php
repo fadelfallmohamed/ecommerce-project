@@ -110,7 +110,7 @@ class OrderController extends Controller
                     'order_id' => $order->id,
                     'type' => 'new_invoice',
                     'message' => 'Une nouvelle facture #' . $invoice->id . ' nécessite une signature pour la commande #' . $order->id,
-                    'is_read' => false,
+                    'read_at' => null,
                 ]);
             }
         }

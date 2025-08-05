@@ -153,28 +153,32 @@
                             <i class="fas fa-store me-2"></i>Émetteur
                         </div>
                         <p class="mb-1">
-                            <strong>Ma Boutique</strong>
+                            <strong>E-COMMERCE SN</strong>
                         </p>
                         <p class="mb-1">
                             <i class="fas fa-map-marker-alt me-2 text-muted"></i>
-                            123 Rue du Commerce
+                            Avenue Blaise Diagne
                         </p>
-                        <p class="mb-1 ms-4">75001 Paris, France</p>
+                        <p class="mb-1 ms-4">Dakar, Sénégal</p>
                         <p class="mb-1">
                             <i class="fas fa-phone me-2 text-muted"></i>
-                            +33 1 23 45 67 89
+                            +221 33 820 00 00
                         </p>
                         <p class="mb-1">
                             <i class="fas fa-envelope me-2 text-muted"></i>
-                            contact@maboutique.fr
+                            contact@ecommerce-sn.com
                         </p>
                         <p class="mb-0">
                             <i class="fas fa-id-card me-2 text-muted"></i>
-                            SIRET: 123 456 789 00000
+                            NINEA: 004321654
                         </p>
                         <p class="mb-0">
                             <i class="fas fa-file-invoice me-2 text-muted"></i>
-                            TVA: FR12345678901
+                            RCCM: SN-DKR-2023-B-12345
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-percent me-2 text-muted"></i>
+                            TVA: 18%
                         </p>
                     </div>
                 </div>
@@ -218,14 +222,14 @@
                         </tr>
                         <tr class="grand-total">
                             <td colspan="3" class="text-end fw-bold">TOTAL TTC :</td>
-                            <td class="text-end fw-bold">{{ number_format($order->total * 1.2, 2, ',', ' ') }} €</td>
+                            <td class="text-end fw-bold">{{ number_format($order->total * 1.2 * 655.96, 0, ',', ' ') }} FCFA</td>
                         </tr>
                         <tr>
                             <td colspan="4" class="text-end text-muted small pt-3">
                                 <i class="fas fa-file-invoice me-1"></i>
                                 Montant en lettres : 
                                 <span class="fst-italic">
-                                    {{ \App\Helpers\NumberToWordsHelper::convert(round($order->total * 1.2, 2)) }} euros
+                                    {{ \App\Helpers\NumberToWordsHelper::convert(round($order->total * 1.2 * 655.96, 0)) }} francs CFA
                                 </span>
                             </td>
                         </tr>
@@ -259,11 +263,11 @@
                     <div class="terms">
                         <p class="mb-2">
                             <i class="fas fa-info-circle me-1"></i>
-                            En cas de retard de paiement, seront exigibles, conformément à l'article L. 441-6 du code de commerce, une indemnité calculée sur la base de trois fois le taux d'intérêt légal en vigueur ainsi qu'une indemnité forfaitaire pour frais de recouvrement de 40 euros.
+                            En cas de retard de paiement, seront exigibles, conformément à la réglementation en vigueur au Sénégal, une indemnité calculée sur la base de trois fois le taux d'intérêt légal en vigueur ainsi qu'une indemnité forfaitaire pour frais de recouvrement de 25 000 FCFA.
                         </p>
                         <p class="mb-0">
                             <i class="fas fa-building me-1"></i>
-                            Ma Boutique - SAS au capital de 50 000 € - RCS Paris 123 456 789 - N° TVA intracommunautaire FR12345678901
+                            E-COMMERCE SN - Capital social de 50 000 000 FCFA - RCCM: SN-DKR-2023-B-12345 - NINEA: 004321654
                         </p>
                     </div>
                 </div>

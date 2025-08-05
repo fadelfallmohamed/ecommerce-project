@@ -53,7 +53,7 @@
                                     </div>
                                 </td>
                                 <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                                <td class="text-end fw-bold">{{ number_format($order->total, 2, ',', ' ') }} €</td>
+                                <td class="text-end fw-bold">{{ format_price(convert_euro_to_fcfa($order->total)) }}</td>
                                 <td class="text-center">
                                     @php
                                         $statusClasses = [

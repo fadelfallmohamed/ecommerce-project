@@ -429,7 +429,7 @@
                                         <td class="ps-4">
                                             <div class="d-flex align-items-center">
                                                 @if($item->product)
-                                                    @if($item->product->images && $item->product->images->isNotEmpty())
+                                                    @if($item->product->images && is_object($item->product->images) && method_exists($item->product->images, 'isNotEmpty') && $item->product->images->isNotEmpty())
                                                         <div class="flex-shrink-0 me-3" style="width: 60px; height: 60px;">
                                                             <img src="{{ asset('storage/' . $item->product->images->first()->path) }}" 
                                                                  alt="{{ $item->product->name }}"

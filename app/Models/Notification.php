@@ -16,11 +16,13 @@ class Notification extends Model
         'order_id',
         'type',
         'message',
-        'is_read'
+        'read_at'
     ];
 
-    protected $casts = [
-        'is_read' => 'boolean',
+    protected $dates = [
+        'read_at',
+        'created_at',
+        'updated_at'
     ];
 
     public function user()
@@ -36,12 +38,26 @@ class Notification extends Model
     // Scopes
     public function scopeUnread($query)
     {
-        return $query->where('is_read', false);
+        return $query->whereNull('read_at');
+    }
+
+    // Scopes
+    public function scopeRead($query)
+    {
+        return $query->whereNotNull('read_at');
     }
 
     // Helpers
     public function markAsRead()
     {
-        $this->update(['is_read' => true]);
+        if (is_null($this->read_at)) {
+            $this->update(['read_at' => now()]);
+        }
+    }
+    
+    // Accessor pour la rétrocompatibilité
+    public function getIsReadAttribute()
+    {
+        return !is_null($this->read_at);
     }
 }
