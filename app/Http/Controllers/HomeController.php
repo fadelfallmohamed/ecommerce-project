@@ -17,11 +17,23 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Récupérer les produits en vedette pour la page d'accueil
+        // Récupérer 3 produits en vedette pour la page d'accueil
         $featuredProducts = Product::with('categories')
+            ->where('is_featured', true) // Seulement les produits en vedette
             ->latest()
-            ->take(8)
+            ->take(3)
             ->get();
+            
+        // Si moins de 3 produits en vedette, compléter avec les derniers produits
+        if ($featuredProducts->count() < 3) {
+            $additionalProducts = Product::with('categories')
+                ->whereNotIn('id', $featuredProducts->pluck('id'))
+                ->latest()
+                ->take(3 - $featuredProducts->count())
+                ->get();
+                
+            $featuredProducts = $featuredProducts->merge($additionalProducts);
+        }
 
         // Si l'utilisateur est connecté, récupérer également les informations du panier
         if (auth()->check()) {

@@ -63,7 +63,7 @@
                                 @endif
                             </td>
                             <td>{{ $item['name'] }}</td>
-                            <td>{{ $item['price'] }} €</td>
+                            <td>{{ format_price(convert_euro_to_fcfa($item['price'])) }}</td>
                             <td>
                                 <form action="{{ route('cart.update', $id) }}" method="POST" class="d-inline">
                                     @csrf
@@ -71,7 +71,7 @@
                                     <button type="submit" class="btn btn-sm btn-outline-primary btn-modern">OK</button>
                                 </form>
                             </td>
-                            <td>{{ $item['price'] * $item['quantity'] }} €</td>
+                            <td>{{ format_price(convert_euro_to_fcfa($item['price'] * $item['quantity'])) }}</td>
                             <td>
                                 <form action="{{ route('cart.remove', $id) }}" method="POST" class="d-inline">
                                     @csrf
@@ -84,7 +84,7 @@
             </table>
         </div>
         <div class="text-end cart-total mt-3">
-            Total : {{ $total }} €
+            Total : {{ format_price(convert_euro_to_fcfa($total)) }}
         </div>
         <div class="text-end mt-4">
             <a href="{{ route('orders.create') }}" class="btn btn-primary btn-modern">Passer commande</a>

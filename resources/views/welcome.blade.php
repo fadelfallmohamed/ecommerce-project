@@ -1189,50 +1189,35 @@ section {
         </div>
         
         <div class="row g-4">
-            <!-- Produit 1 -->
+            @forelse($featured_products as $product)
             <div class="col-md-4">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                         alt="Produit 1" 
-                         class="product-image">
+                    @if($product->main_image)
+                        <img src="{{ asset('storage/' . $product->main_image) }}" 
+                             alt="{{ $product->name }}" 
+                             class="product-image">
+                    @else
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-box-open fa-3x text-muted"></i>
+                        </div>
+                    @endif
                     <div class="product-info">
-                        <h3 class="product-title">T-shirt élégant</h3>
-                        <p class="text-muted mb-3">T-shirt en coton bio pour un confort optimal</p>
-                        <p class="product-price">29,99 €</p>
-                        <a href="#" class="btn btn-outline-dark w-100">Voir le produit</a>
+                        <h3 class="product-title">{{ $product->name }}</h3>
+                        <p class="text-muted mb-3">{{ Str::limit($product->description, 80) }}</p>
+                        <p class="product-price">{{ format_price(convert_euro_to_fcfa($product->price)) }}</p>
+                        <a href="{{ route('catalogue.fiche', $product) }}" class="btn btn-outline-dark w-100">
+                            Voir le produit
+                        </a>
                     </div>
                 </div>
             </div>
-            
-            <!-- Produit 2 -->
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1526&q=80" 
-                         alt="Produit 2" 
-                         class="product-image">
-                    <div class="product-info">
-                        <h3 class="product-title">Jean slim noir</h3>
-                        <p class="text-muted mb-3">Jean slim élégant et confortable</p>
-                        <p class="product-price">59,99 €</p>
-                        <a href="#" class="btn btn-outline-dark w-100">Voir le produit</a>
-                    </div>
+            @empty
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    Aucun produit n'est disponible pour le moment.
                 </div>
             </div>
-            
-            <!-- Produit 3 -->
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1436&q=80" 
-                         alt="Produit 3" 
-                         class="product-image">
-                    <div class="product-info">
-                        <h3 class="product-title">Veste en cuir</h3>
-                        <p class="text-muted mb-3">Veste en cuir véritable pour un style intemporel</p>
-                        <p class="product-price">129,99 €</p>
-                        <a href="#" class="btn btn-outline-dark w-100">Voir le produit</a>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </section>

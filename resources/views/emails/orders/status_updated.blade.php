@@ -8,7 +8,7 @@ Le statut de votre commande n°{{ $order->id }} a été mis à jour.
 **Nouveau statut :** {{ ucfirst($order->status) }}
 
 @component('mail::panel')
-**Total :** {{ $order->total }} €
+**Total :** {{ format_price(convert_euro_to_fcfa($order->total)) }}
 **Paiement :** {{ $order->payment_method == 'online' ? 'En ligne' : 'Espèces à la livraison' }}
 @endcomponent
 
@@ -17,7 +17,7 @@ Le statut de votre commande n°{{ $order->id }} a été mis à jour.
 | Produit | Prix | Quantité | Sous-total |
 |---------|------|----------|------------|
 @foreach($order->items as $item)
-| {{ $item->product->name ?? 'Produit supprimé' }} | {{ $item->price }} € | {{ $item->quantity }} | {{ $item->price * $item->quantity }} € |
+| {{ $item->product->name ?? 'Produit supprimé' }} | {{ format_price(convert_euro_to_fcfa($item->price)) }} | {{ $item->quantity }} | {{ format_price(convert_euro_to_fcfa($item->price * $item->quantity)) }} |
 @endforeach
 @endcomponent
 

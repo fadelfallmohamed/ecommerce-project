@@ -75,7 +75,7 @@
         <div class="col-md-6">
             <div class="fiche-title">{{ $product->name }}</div>
             <div class="mb-3 text-muted">{{ $product->description }}</div>
-            <div class="fiche-price">{{ $product->price }} €</div>
+            <div class="fiche-price">{{ format_price(convert_euro_to_fcfa($product->price)) }}</div>
             <div class="fiche-stock">
                 @php
                     $badgeClass = 'bg-success';

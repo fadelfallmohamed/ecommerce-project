@@ -33,13 +33,16 @@ class ProductController extends Controller
             'categories.*' => 'exists:categories,id',
         ]);
 
+        // Générer un slug à partir du nom
+        $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
+        
         // Traitement de l'image principale
         if ($request->hasFile('main_image')) {
             $path = $request->file('main_image')->store('products', 'public');
             $validated['main_image'] = $path;
         }
 
-        // Créer le produit
+        // Créer le produit avec les données validées et le slug
         $product = Product::create($validated);
         
         // Créer l'enregistrement de stock
@@ -173,9 +176,25 @@ class ProductController extends Controller
     {
         // Charger les photos du produit avec la relation 'photos' définie dans le modèle
         $product->load('photos');
+        
+        // Si le produit n'a pas de photos dans la table product_photos, mais a une image principale
+        if ($product->photos->isEmpty() && $product->main_image) {
+            // Créer un objet photo factice avec l'URL de l'image principale
+            $mainImage = (object)[
+                'url' => asset('storage/' . $product->main_image),
+                'path' => $product->main_image,
+                'is_primary' => true
+            ];
+            
+            return view('catalogue.fiche', [
+                'product' => $product,
+                'images' => collect([$mainImage])
+            ]);
+        }
+        
         return view('catalogue.fiche', [
             'product' => $product,
-            'images' => $product->photos // Utilisation de la relation 'photos' au lieu de 'images'
+            'images' => $product->photos
         ]);
     }
 } 

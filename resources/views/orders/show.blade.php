@@ -459,13 +459,13 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($item->price, 2, ',', ' ') }} €
+                                            {{ format_price(convert_euro_to_fcfa($item->price)) }}
                                         </td>
                                         <td class="text-center">
                                             {{ $item->quantity }}
                                         </td>
                                         <td class="text-end pe-4 fw-medium">
-                                            {{ number_format($item->price * $item->quantity, 2, ',', ' ') }} €
+                                            {{ format_price(convert_euro_to_fcfa($item->price * $item->quantity)) }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -493,25 +493,25 @@
                     <div class="vstack gap-2">
                         <div class="d-flex justify-content-between">
                             <span class="text-muted">Sous-total</span>
-                            <span>{{ number_format($order->subtotal, 2, ',', ' ') }} €</span>
+                            <span>{{ format_price(convert_euro_to_fcfa($order->subtotal)) }}</span>
                         </div>
                         
                         @if($order->discount > 0)
                             <div class="d-flex justify-content-between">
                                 <span class="text-muted">Réduction</span>
-                                <span class="text-danger">-{{ number_format($order->discount, 2, ',', ' ') }} €</span>
+                                <span class="text-danger">-{{ format_price(convert_euro_to_fcfa($order->discount)) }}</span>
                             </div>
                         @endif
                         
                         <div class="d-flex justify-content-between">
                             <span class="text-muted">Frais de livraison</span>
-                            <span>{{ $order->shipping_cost > 0 ? number_format($order->shipping_cost, 2, ',', ' ') . ' €' : 'Gratuit' }}</span>
+                            <span>{{ $order->shipping_cost > 0 ? format_price(convert_euro_to_fcfa($order->shipping_cost)) : 'Gratuit' }}</span>
                         </div>
                         
                         <div class="pt-3 mt-2 border-top">
                             <div class="d-flex justify-content-between fw-bold fs-5">
                                 <span>Total TTC</span>
-                                <span>{{ number_format($order->total, 2, ',', ' ') }} €</span>
+                                <span>{{ format_price(convert_euro_to_fcfa($order->total)) }}</span>
                             </div>
                         </div>
                     </div>

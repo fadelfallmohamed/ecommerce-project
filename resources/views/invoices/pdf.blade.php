@@ -199,22 +199,22 @@
                                     <i class="fas fa-hashtag me-1"></i>PROD-{{ str_pad($item->product_id, 4, '0', STR_PAD_LEFT) }}
                                 </small>
                             </td>
-                            <td class="text-end">{{ number_format($item->price, 2, ',', ' ') }} €</td>
+                            <td class="text-end">{{ format_price(convert_euro_to_fcfa($item->price)) }}</td>
                             <td class="text-center">
                                 <span class="badge bg-primary rounded-pill">{{ $item->quantity }}</span>
                             </td>
-                            <td class="text-end fw-semibold">{{ number_format($item->price * $item->quantity, 2, ',', ' ') }} €</td>
+                            <td class="text-end fw-semibold">{{ format_price(convert_euro_to_fcfa($item->price * $item->quantity)) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                     <tfoot class="table-group-divider">
                         <tr class="total-row">
                             <td colspan="3" class="text-end">Total HT :</td>
-                            <td class="text-end">{{ number_format($order->total, 2, ',', ' ') }} €</td>
+                            <td class="text-end">{{ format_price(convert_euro_to_fcfa($order->total)) }}</td>
                         </tr>
                         <tr class="total-row">
                             <td colspan="3" class="text-end">TVA (20,00%) :</td>
-                            <td class="text-end">{{ number_format($order->total * 0.2, 2, ',', ' ') }} €</td>
+                            <td class="text-end">{{ format_price(convert_euro_to_fcfa($order->total * 0.2)) }}</td>
                         </tr>
                         <tr class="grand-total">
                             <td colspan="3" class="text-end fw-bold">TOTAL TTC :</td>
