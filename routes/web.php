@@ -127,7 +127,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('utilisateurs/export', [App\Http\Controllers\Admin\UserController::class, 'export'])
         ->name('users.export');
     
-       
+    // Routes pour la gestion des contacts
+    Route::prefix('contacts')->name('contacts.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\ContactController::class, 'index'])->name('index');
+        Route::get('/{contact}', [App\Http\Controllers\Admin\ContactController::class, 'show'])->name('show');
+        Route::put('/{contact}', [App\Http\Controllers\Admin\ContactController::class, 'update'])->name('update');
+        Route::delete('/{contact}', [App\Http\Controllers\Admin\ContactController::class, 'destroy'])->name('destroy');
+        Route::post('/{contact}/marquer-non-lu', [App\Http\Controllers\Admin\ContactController::class, 'markAsUnread'])
+            ->name('mark-as-unread');
+    });
+    
     Route::post('factures/signer/{invoice}', [App\Http\Controllers\InvoiceController::class, 'sign'])
         ->name('invoices.sign');
 });

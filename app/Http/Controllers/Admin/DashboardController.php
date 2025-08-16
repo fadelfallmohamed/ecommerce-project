@@ -87,8 +87,8 @@ class DashboardController extends Controller
                     'product_id',
                     'products.name',
                     'products.main_image as image',
-                    DB::raw('COALESCE(SUM(quantity), 0) as total_quantity'),
-                    DB::raw('COALESCE(SUM(order_items.price * quantity), 0) as total_revenue')
+                    DB::raw('COALESCE(SUM(order_items.quantity), 0) as total_quantity'),
+                    DB::raw('COALESCE(SUM(order_items.price * order_items.quantity), 0) as total_revenue')
                 )
                 ->leftJoin('products', 'order_items.product_id', '=', 'products.id')
                 ->groupBy('product_id', 'products.name', 'products.main_image')

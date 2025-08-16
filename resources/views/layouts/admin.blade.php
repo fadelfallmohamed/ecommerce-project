@@ -44,6 +44,15 @@
                     <a href="{{ route('admin.users.index') }}" class="list-group-item list-group-item-action bg-dark text-white">
                         <i class="fas fa-users me-2"></i> Utilisateurs
                     </a>
+                    <a href="{{ route('admin.contacts.index') }}" class="list-group-item list-group-item-action bg-dark text-white">
+                        <i class="fas fa-envelope me-2"></i> Messages
+                        @php
+                            $unreadCount = \App\Models\Contact::unread()->count();
+                        @endphp
+                        @if($unreadCount > 0)
+                            <span class="badge bg-danger rounded-pill ms-2">{{ $unreadCount }}</span>
+                        @endif
+                    </a>
                 </div>
             </div>
 
